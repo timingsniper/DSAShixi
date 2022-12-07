@@ -5,70 +5,54 @@
 #include <algorithm>
 #include <stack>
 #include <queue>
+#include <cmath>
 
 using namespace std;
 
-const int MAX = 31000;
-int parent[MAX]; 
-//int total[MAX];
-//int under[MAX]; //큐브 i 밑에 있는 큐브 개수 표시
+int parent[50005];
 int cnt;
 
-
-
 int getRoot(int a) {
-	if (parent[a] == a) {
-	  return a;
-  }
-  return parent[a] = getRoot(parent[a]);
+    if (parent[a] == a) {
+        return a;
+    }
+    //return parent[a] = getRoot(parent[a]);
+    return getRoot(parent[a]);
 }
 
-void find(int l, int r){
-    int ll = getRoot(l), rr = getRoot(r);
-    if(ll == rr){
+void check(int x, int y) {
+    int rootOne = getRoot(x);
+    int rootTwo = getRoot(y);
+    if (rootOne==rootTwo) {
         cout << "Yes" << endl;
     }
-    else{
-        parent[rr] = ll;
-        cnt--;
+    else {
         cout << "No" << endl;
+        parent[rootTwo] = rootOne;
+        cnt--;
     }
 }
 
-/*
-void merge(int a, int b){
-    int p1 = getRoot(a);
-    int p2 = getRoot(b);
-    if(p1 == p2){
-        return;
-    }
-	parent[getRoot(b)] = getRoot(a);
-}*/
-
-
-int main(){
-    while(1){
-        int n,m;
-        cin >> n >> m;
-        for(int i = 1; i<=n; i++){
+int main() {
+    int n, m;
+    int x, y;
+    while (scanf("%d %d", &n, &m) != EOF) {
+        //cin >> n >> m;
+        for (int i = 1; i <= n; i++) {
             parent[i] = i;
         }
         cnt = n;
-        for(int i = 1; i<=m; i++){
-            int x, y;
+        for (int i = 1; i <= m; i++) {
+            
             cin >> x >> y;
-            find(x,y);
+            check(x, y);
         }
         cout << cnt << endl;
-        for(int i = 1; i<=n; i++){
-            if(parent[i] == i){
+        for (int i = 1; i <= n; i++) {
+            if (parent[i] == i) {
                 cout << i << " ";
             }
-            
         }
         cout << endl;
     }
-    
-
-    
 }
